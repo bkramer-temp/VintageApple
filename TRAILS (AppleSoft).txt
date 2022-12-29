@@ -1,0 +1,51 @@
+ 10  REM  TRAILS: EAT MORSELS AND OUTLAST YOUR OPPONENT!
+ 16 P0 =  PDL (0) - 10:Q0 = P0 + 20:P1 =  PDL (1) - 10:Q1 = P1 + 20
+ 20  DIM DX(1),DY(1):DX(0) = 1:DX(1) =  - 1
+ 21  DIM X(1),Y(1):X(0) = 5:Y(0) = 20:X(1) = 34:Y(1) = 20
+ 23  DIM T(1,99),B(1),E(1)
+ 24  DIM L(1):L(0) = 5:L(1) = 5
+ 25 J = 0
+ 30  GR 
+ 31  COLOR= 15
+ 32  HLIN 0,39 AT 0: HLIN 0,39 AT 39: VLIN 0,39 AT 0: VLIN 0,39 AT 39
+ 33  COLOR= 13: FOR K = 1 TO 10: GOSUB 90: NEXT K
+ 40  FOR P = 0 TO 1
+ 41 Z = 0: GOSUB 200: IF P GOTO 48
+ 42 K =  PEEK ( - 16384): IF K = 160 GOTO 64
+ 43  IF K < 201 OR K > 204 GOTO 65
+ 45  ON K - 200 GOTO 59,55,61,57
+ 48  IF  PEEK ( - 16287) > 127 GOTO 64
+ 49  IF J THEN K = J:J = 0: ON K GOTO 55,57,59,61
+ 50  GOTO 65
+ 55  IF DX(P) <  > 1 THEN DX(P) =  - 1:DY(P) = 0
+ 56  GOTO 65
+ 57  IF DX(P) <  >  - 1 THEN DX(P) = 1:DY(P) = 0
+ 58  GOTO 65
+ 59  IF DY(P) <  > 1 THEN DX(P) = 0:DY(P) =  - 1
+ 60  GOTO 65
+ 61  IF DY(P) <  >  - 1 THEN DX(P) = 0:DY(P) = 1
+ 62  GOTO 65
+ 64  IF L(P) > 5 THEN L(P) = L(P) - 1:Z = 2
+ 65  FOR I = 0 TO Z: GOSUB 200
+ 68 X = X(P) + DX(P):Y = Y(P) + DY(P):X(P) = X:Y(P) = Y:C =  SCRN( X,Y)
+ 70  IF C = 13 AND L(P) < 100 THEN L(P) = L(P) + 5: GOTO 72
+ 71  IF C GOTO 99
+ 72  COLOR= P + 2: PLOT X,Y:T(P,E(P)) = 40 * X + Y:E(P) = E(P) + 1: IF E(P) = 100 THEN E(P) = 0
+ 73 K = E(P) - B(P): IF K < 0 THEN K = K + 100
+ 74  IF K <  = L(P) GOTO 78
+ 75  FOR K = K - L(P) TO 1 STEP  - 1: GOSUB 200
+ 76 K% = T(P,B(P)):J% = K% / 40: COLOR= 0: PLOT J%,K% - J% * 40:B(P) = B(P) + 1: IF B(P) = 100 THEN B(P) = 0
+ 77  NEXT K
+ 78  NEXT I
+ 79  IF  RND (1) < .05 THEN  GOSUB 90
+ 80  NEXT P: GOTO 40
+ 90 X =  INT ( RND (1) * 36) + 3:Y =  INT ( RND (1) * 36) + 3
+ 91  IF  SCRN( X,Y) GOTO 90
+ 92  COLOR= 13: PLOT X,Y: RETURN 
+ 99  FOR K = 0 TO 70: COLOR= P + 2: PLOT X,Y: COLOR= 15: PLOT X,Y: NEXT 
+ 101  END 
+ 200 Q =  PDL (0): IF Q < P0 THEN J = 1: RETURN 
+ 201  IF Q > Q0 THEN J = 2: RETURN 
+ 202 Q =  PDL (1): IF Q < P1 THEN J = 3: RETURN 
+ 203  IF Q > Q1 THEN J = 4: RETURN 
+ 204  RETURN 
